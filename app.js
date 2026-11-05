@@ -34,7 +34,7 @@ document.addEventListener('click',e=>{const p=e.target.closest('[data-play]');if
 $('#filters').addEventListener('click',e=>{const b=e.target.closest('[data-filter]');if(!b)return;filter=b.dataset.filter;document.querySelectorAll('.filter').forEach(x=>x.classList.toggle('active',x===b));render()});$('#searchInput').addEventListener('input',e=>{query=e.target.value.toLowerCase();render()});
 document.querySelectorAll('[data-nav]').forEach(a=>a.addEventListener('click',()=>{document.querySelectorAll('[data-nav]').forEach(x=>x.classList.toggle('active',x===a));$('#crumb').textContent=a.textContent.trim()}));
 function openGame(id){const g=games.find(x=>x.id===id);if(!g)return;recent=[id,...recent.filter(x=>x!==id)].slice(0,5);write('nexplay-recent',recent);renderLists();$('#recentCount').textContent=String(recent.length).padStart(2,'0');$('#modalTitle').textContent=g.title;$('#modalCategory').textContent=g.category;$('#gameModal').classList.add('open');$('#gameModal').setAttribute('aria-hidden','false');document.body.style.overflow='hidden';const stage=$('#gameStage');stage.innerHTML='';if(g.url){stage.innerHTML=`<iframe title="${g.title}" src="${g.url}" style="width:100%;height:65vh;min-height:360px;border:0;border-radius:10px;background:#fff" sandbox="allow-scripts allow-same-origin"></iframe>`;return}({snake:snakeGame,memory:memoryGame,ttt:tttGame,'2048':game2048,breakout:breakoutGame,reflex:reflexGame,colors:colorsGame}[id])(stage)}
-function closeGame(){ $('#gameModal').classList.remove('open');$('#gameModal').setAttribute('aria-hidden','true');document.body.style.overflow='';$('#gameStage').innerHTML='';if(window.gameCleanup){window.gameCleanup();window.gameCleanup=null}}
+function closeGame(){ document.querySelector('.game-window').classList.remove('game-fullscreen'); const fs=document.querySelector('#fullscreenBtn'); if(fs)fs.textContent='⛶ Tela cheia'; $('#gameModal').classList.remove('open');$('#gameModal').setAttribute('aria-hidden','true');document.body.style.overflow='';$('#gameStage').innerHTML='';if(window.gameCleanup){window.gameCleanup();window.gameCleanup=null}}
 document.querySelectorAll('[data-close]').forEach(x=>x.addEventListener('click',closeGame));document.addEventListener('keydown',e=>{if(e.key==='Escape')closeGame()});
 function snakeGame(root){root.innerHTML=`<div class="game-ui"><h3>Neon Snake</h3><p>Use as setas do teclado ou os botões para pegar os pontos.</p><canvas class="snake-canvas" width="360" height="300"></canvas><p id="snakeScore">Pontos: 0</p><div><button class="game-action" id="snakeStart">Começar / reiniciar</button></div><div class="key-hint">No celular: deslize sobre o tabuleiro para mudar de direção.</div></div>`;const c=root.querySelector('canvas'),ctx=c.getContext('2d'),score=root.querySelector('#snakeScore');let snake,food,dir,next,points,timer,over=true;function reset(){snake=[{x:8,y:7},{x:7,y:7},{x:6,y:7}];food={x:14,y:9};dir={x:1,y:0};next=dir;points=0;over=false;score.textContent='Pontos: 0';clearInterval(timer);timer=setInterval(tick,115);draw()}function draw(){ctx.fillStyle='#0a1720';ctx.fillRect(0,0,360,300);ctx.fillStyle='#18302e';for(let x=0;x<18;x++)for(let y=0;y<15;y++)ctx.fillRect(x*20+9,y*20+9,2,2);ctx.fillStyle='#ff8bba';ctx.beginPath();ctx.arc(food.x*20+10,food.y*20+10,7,0,7);ctx.fill();snake.forEach((p,i)=>{ctx.fillStyle=i?'#45b98d':'#a0f4c7';ctx.fillRect(p.x*20+2,p.y*20+2,16,16)})}function tick(){dir=next;const h={x:snake[0].x+dir.x,y:snake[0].y+dir.y};if(h.x<0||h.x>=18||h.y<0||h.y>=15||snake.some(p=>p.x===h.x&&p.y===h.y)){clearInterval(timer);over=true;score.textContent=`Fim de jogo! Pontuação: ${points}`;return}snake.unshift(h);if(h.x===food.x&&h.y===food.y){points++;score.textContent=`Pontos: ${points}`;food={x:Math.floor(Math.random()*18),y:Math.floor(Math.random()*15)}}else snake.pop();draw()}function key(e){const map={ArrowUp:{x:0,y:-1},ArrowDown:{x:0,y:1},ArrowLeft:{x:-1,y:0},ArrowRight:{x:1,y:0}};if(map[e.key]&& !over){e.preventDefault();const d=map[e.key];if(d.x!==-dir.x||d.y!==-dir.y)next=d}}document.addEventListener('keydown',key);let sx=0,sy=0;c.addEventListener('touchstart',e=>{sx=e.touches[0].clientX;sy=e.touches[0].clientY},{passive:true});c.addEventListener('touchend',e=>{let dx=e.changedTouches[0].clientX-sx,dy=e.changedTouches[0].clientY-sy;let d=Math.abs(dx)>Math.abs(dy)?{x:Math.sign(dx),y:0}:{x:0,y:Math.sign(dy)};if((d.x!==-dir.x||d.y!==-dir.y)&&!over)next=d},{passive:true});root.querySelector('#snakeStart').onclick=reset;window.gameCleanup=()=>{clearInterval(timer);document.removeEventListener('keydown',key)}}
 function memoryGame(root){const icons=['☀','☂','♫','☘','◆','☾','✿','★'];let cards=[...icons,...icons].sort(()=>Math.random()-.5),open=[],matched=[],moves=0,locked=false;root.innerHTML=`<div class="game-ui"><h3>Memória Mágica</h3><p>Encontre os 8 pares. Menos tentativas = melhor resultado!</p><div class="memory-grid"></div><p id="memoryStatus">Tentativas: 0 · Pares: 0/8</p><button class="game-action" id="memoryReset">Embaralhar</button></div>`;const grid=root.querySelector('.memory-grid'),status=root.querySelector('#memoryStatus');function draw(){grid.innerHTML=cards.map((v,i)=>`<button class="memory-tile ${open.includes(i)||matched.includes(i)?'revealed':''}" data-card="${i}">${open.includes(i)||matched.includes(i)?v:'?'}</button>`).join('')}grid.onclick=e=>{const b=e.target.closest('[data-card]');if(!b||locked)return;const i=+b.dataset.card;if(open.includes(i)||matched.includes(i))return;open.push(i);draw();if(open.length===2){moves++;locked=true;if(cards[open[0]]===cards[open[1]]){matched.push(...open);open=[];locked=false;status.textContent=`Tentativas: ${moves} · Pares: ${matched.length/2}/8`}else setTimeout(()=>{open=[];locked=false;draw();status.textContent=`Tentativas: ${moves} · Pares: ${matched.length/2}/8`},650)}else status.textContent=`Tentativas: ${moves} · Pares: ${matched.length/2}/8`;if(matched.length===16)status.textContent=`Você venceu em ${moves} tentativas! ✨`};function reset(){cards=[...icons,...icons].sort(()=>Math.random()-.5);open=[];matched=[];moves=0;locked=false;status.textContent='Tentativas: 0 · Pares: 0/8';draw()}root.querySelector('#memoryReset').onclick=reset;draw()}
@@ -60,3 +60,39 @@ function colorsGame(root){
 
 $('#installBtn').addEventListener('click',async()=>{if(deferredInstall){deferredInstall.prompt();await deferredInstall.userChoice;deferredInstall=null}else alert('No iPhone: abra o site no Safari, toque em Compartilhar e escolha “Adicionar à Tela de Início”. Em outros navegadores, procure a opção Instalar aplicativo no menu.')});window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredInstall=e});
 if('serviceWorker'in navigator&&location.protocol.startsWith('http'))window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));render();
+
+
+// Preferencia de aparelho: primeira visita e configuracoes
+const deviceModal = document.querySelector('#deviceModal');
+const deviceSave = document.querySelector('#saveDevice');
+let selectedDevice = localStorage.getItem('nexplay-device-mode') || '';
+function applyDeviceMode(mode){
+  if(!mode) return;
+  selectedDevice = mode;
+  document.body.dataset.deviceMode = mode;
+  localStorage.setItem('nexplay-device-mode', mode);
+}
+function openDeviceSettings(){
+  document.querySelectorAll('.device-option').forEach(btn=>btn.classList.toggle('selected',btn.dataset.device===selectedDevice));
+  deviceSave.disabled = !selectedDevice;
+  deviceModal.hidden = false;
+  document.body.style.overflow = 'hidden';
+}
+function closeDeviceSettings(){deviceModal.hidden = true;document.body.style.overflow='';}
+document.querySelectorAll('.device-option').forEach(btn=>btn.addEventListener('click',()=>{
+  selectedDevice=btn.dataset.device;
+  document.querySelectorAll('.device-option').forEach(x=>x.classList.toggle('selected',x===btn));
+  deviceSave.disabled=false;
+}));
+deviceSave.addEventListener('click',()=>{applyDeviceMode(selectedDevice);closeDeviceSettings();});
+document.querySelector('#settingsBtn').addEventListener('click',openDeviceSettings);
+if(!selectedDevice){openDeviceSettings()}else{applyDeviceMode(selectedDevice)}
+
+// Tela cheia visual para o jogo (compativel tambem com navegadores moveis sem Fullscreen API)
+const fullscreenBtn=document.querySelector('#fullscreenBtn');
+fullscreenBtn.addEventListener('click',()=>{
+  const win=document.querySelector('.game-window');
+  const active=win.classList.toggle('game-fullscreen');
+  fullscreenBtn.textContent=active?'⤢ Sair da tela cheia':'⛶ Tela cheia';
+  fullscreenBtn.setAttribute('aria-label',active?'Sair da tela cheia':'Alternar tela cheia');
+});
