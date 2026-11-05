@@ -20,7 +20,7 @@
       <div class="sidebar-bottom"><div class="offline-card"><span class="status-dot"></span><div><b>Modo preparado</b><small>Instale para jogar offline</small></div></div><small class="side-foot">NEXPLAY © 2026</small></div>
     </aside>
     <main class="main-content" id="inicio">
-      <header class="topbar"><button class="mobile-brand" onclick="location.hash='#inicio'">NEX<span>PLAY</span></button><div class="breadcrumb">Biblioteca <span>/</span> <b id="crumb">Início</b></div><div class="top-actions"><span class="connection"><i></i><span id="connectionText">Conectado</span></span><button class="avatar" title="Perfil local">P</button></div></header>
+      <header class="topbar"><button class="mobile-brand" onclick="location.hash='#inicio'">NEX<span>PLAY</span></button><div class="breadcrumb">Biblioteca <span>/</span> <b id="crumb">Início</b></div><div class="top-actions"><button class="settings-btn" id="settingsBtn" type="button" aria-label="Configurações">⚙ Configurações</button><span class="connection"><i></i><span id="connectionText">Conectado</span></span><button class="avatar" title="Perfil local">P</button></div></header>
       <section class="hero"><div class="hero-copy"><div class="eyebrow"><span class="spark">✦</span> SUA CENTRAL DE JOGOS</div><h1>Sua próxima<br>partida <em>começa aqui.</em></h1><p>Descubra jogos, salve seus favoritos e continue se divertindo — até quando estiver sem internet.</p><div class="hero-actions"><a class="primary-btn" href="#explorar">Explorar jogos <span>↗</span></a><button class="text-btn" id="installBtn">＋ Instalar NEXPLAY</button></div><div class="hero-meta"><span><b>07</b> jogos disponíveis</span><span class="meta-divider"></span><span><b>100%</b> diversão local</span></div></div><div class="hero-art" aria-label="Ilustração abstrata de videogame"><div class="orbit orbit-one"></div><div class="orbit orbit-two"></div><div class="gamepad"><div class="pad-cross"><i></i><b></b></div><div class="pad-buttons"><i></i><i></i><i></i><i></i></div><div class="pad-center">N</div></div><div class="float-chip chip-one">✦ PLAY</div><div class="float-chip chip-two">OFFLINE READY</div><div class="art-glow"></div></div></section>
       <section class="stats-row"><div class="stat"><span class="stat-icon purple">▦</span><div><b id="totalGames">07</b><small>Jogos na biblioteca</small></div></div><div class="stat"><span class="stat-icon pink">♡</span><div><b id="favCount">00</b><small>Seus favoritos</small></div></div><div class="stat"><span class="stat-icon blue">◷</span><div><b id="recentCount">00</b><small>Jogos recentes</small></div></div><div class="stat"><span class="stat-icon green">⌁</span><div><b>Offline</b><small>Preparado para instalar</small></div></div></section>
       <section class="content-section" id="explorar"><div class="section-heading"><div><div class="eyebrow">ESCOLHA SUA EXPERIÊNCIA</div><h2>Descubra seu próximo jogo</h2><p>Partidas rápidas, desafios para superar e jogos que rodam direto no navegador.</p></div><div class="search-wrap"><span>⌕</span><input id="searchInput" type="search" placeholder="Buscar jogo..." aria-label="Buscar jogo"></div></div>
@@ -32,6 +32,19 @@
       <footer><a class="brand footer-brand" href="#inicio"><span class="brand-mark">N</span><span>NEX<span>PLAY</span></span></a><span>Feito para jogar. Feito para ser seu.</span><span>Versão 2.0.0 · NEXPLAY</span></footer>
     </main>
   </div>
-  <div class="modal" id="gameModal" aria-hidden="true"><div class="modal-backdrop" data-close></div><div class="game-window"><div class="game-window-head"><div><span class="live-dot"></span><b id="modalTitle">Jogo</b><small id="modalCategory">Arcade</small></div><button class="close-btn" data-close aria-label="Fechar jogo">✕</button></div><div class="game-stage" id="gameStage"></div><div class="game-window-foot"><span>✦ NEXPLAY ARCADE</span><span>Seu progresso fica neste dispositivo quando compatível.</span></div></div></div>
+  <div class="device-modal" id="deviceModal" role="dialog" aria-modal="true" aria-labelledby="deviceTitle" hidden>
+    <div class="device-dialog">
+      <div class="eyebrow">PERSONALIZE SUA EXPERIÊNCIA</div>
+      <h2 id="deviceTitle">Onde você vai jogar?</h2>
+      <p>Escolha o aparelho principal. Você poderá mudar essa opção nas configurações quando quiser.</p>
+      <div class="device-options">
+        <button type="button" class="device-option" data-device="mobile"><span>▯</span><b>Celular</b><small>Interface otimizada para toque</small></button>
+        <button type="button" class="device-option" data-device="desktop"><span>▣</span><b>Computador</b><small>Interface para teclado e mouse</small></button>
+      </div>
+      <button type="button" class="device-save" id="saveDevice" disabled>Continuar</button>
+      <small class="device-note">A escolha fica salva neste aparelho.</small>
+    </div>
+  </div>
+  <div class="modal" id="gameModal" aria-hidden="true"><div class="modal-backdrop" data-close></div><div class="game-window"><div class="game-window-head"><div><span class="live-dot"></span><b id="modalTitle">Jogo</b><small id="modalCategory">Arcade</small></div><div class="game-head-actions"><button class="fullscreen-btn" id="fullscreenBtn" type="button" aria-label="Alternar tela cheia">⛶ Tela cheia</button><button class="close-btn" data-close aria-label="Fechar jogo">✕</button></div></div><div class="game-stage" id="gameStage"></div><div class="game-window-foot"><span>✦ NEXPLAY ARCADE</span><span>Seu progresso fica neste dispositivo quando compatível.</span></div></div></div>
   <script src="app.js"></script>
 </body></html>
