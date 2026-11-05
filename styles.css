@@ -24,3 +24,26 @@ button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid #a994
 .reflex-pad.waiting{background:linear-gradient(145deg,#6c3e42,#40272f);color:#ffd5d5}.reflex-pad.go{background:linear-gradient(145deg,#147d61,#14513f);border-color:#58e1b4;color:#eafff7;box-shadow:0 0 45px #38d8a455}.reflex-pad:active{transform:scale(.98)}
 .color-prompt{font:800 29px 'Space Grotesk';letter-spacing:2px;margin:22px 0}.color-options{display:flex;justify-content:center;gap:12px;flex-wrap:wrap}.color-choice{width:58px;height:58px;border:3px solid #ffffff40;border-radius:16px;background:var(--choice);cursor:pointer;box-shadow:0 8px 20px #0004;transition:transform .15s}.color-choice:hover{transform:translateY(-4px) scale(1.05)}
 @media(max-width:700px){.game-cover{height:120px}.hero{background:radial-gradient(ellipse at 75% 75%,#39306b 0%,transparent 50%),linear-gradient(115deg,#171b31,#101827)}.hero h1{letter-spacing:-1.8px}.reflex-pad{min-height:125px}}
+
+/* Seletor de aparelho e configuracoes NEXPLAY */
+.settings-btn{border:1px solid #34405a;background:#151e30;color:#c8baff;border-radius:8px;padding:8px 11px;font:600 10px 'DM Sans';cursor:pointer}
+.device-modal{position:fixed;inset:0;z-index:50;display:grid;place-items:center;padding:18px;background:#030611e8;backdrop-filter:blur(10px)}
+.device-modal[hidden]{display:none}
+.device-dialog{width:min(480px,100%);padding:28px 22px;border:1px solid #4a4078;border-radius:18px;background:linear-gradient(145deg,#171d32,#101827);box-shadow:0 25px 90px #000b;text-align:center}
+.device-dialog h2{font:700 25px 'Space Grotesk';margin:12px 0 8px}
+.device-dialog p{font-size:12px;line-height:1.6;color:#9ba8bd;margin:0 auto 20px;max-width:350px}
+.device-options{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.device-option{min-height:130px;border:1px solid #34415c;border-radius:12px;background:#111a29;color:#e9ecf6;padding:14px 8px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;cursor:pointer}
+.device-option>span{font-size:31px;color:#a995ff}
+.device-option b{font:700 14px 'Space Grotesk'}
+.device-option small{font-size:10px;color:#8c9ab0}
+.device-option.selected{border-color:#9b80ff;background:#292346;box-shadow:0 0 0 2px #9b80ff33}
+.device-save{width:100%;margin-top:16px;padding:12px;border:0;border-radius:9px;background:linear-gradient(100deg,#8065f5,#a15fe8);color:white;font:700 13px 'DM Sans';cursor:pointer}
+.device-save:disabled{opacity:.4;cursor:not-allowed}
+.device-note{display:block;color:#78869c;font-size:10px;margin-top:11px}
+.game-head-actions{display:flex;align-items:center;gap:8px}
+.fullscreen-btn{border:1px solid #39445e;background:#1b263a;color:#d7d0ff;border-radius:7px;padding:7px 10px;font:600 10px 'DM Sans';cursor:pointer}
+.game-window.game-fullscreen{position:fixed;inset:0;width:100vw;height:100dvh;max-height:none;border-radius:0;z-index:30;display:flex;flex-direction:column}
+.game-window.game-fullscreen .game-stage{flex:1;overflow:auto;min-height:0}
+.game-window.game-fullscreen .game-window-foot{margin-top:auto}
+@media(max-width:700px){.settings-btn{font-size:9px;padding:7px 8px}.top-actions{gap:7px}.device-dialog{padding:24px 16px}.device-dialog h2{font-size:22px}}
