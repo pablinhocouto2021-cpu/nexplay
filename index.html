@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#090d18"><meta name="description" content="NEXPLAY: descubra jogos rápidos, desafios casuais e clássicos para jogar no navegador, com suporte offline."><meta name="application-name" content="NEXPLAY"><meta name="color-scheme" content="dark"><meta property="og:type" content="website"><meta property="og:title" content="NEXPLAY — sua próxima partida começa aqui"><meta property="og:description" content="Descubra jogos, desafie seus recordes e continue jogando offline."><meta property="og:site_name" content="NEXPLAY"><meta name="twitter:card" content="summary_large_image">
+  <title>NEXPLAY — sua próxima partida começa aqui</title>
+  <link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="assets/icon.svg" type="image/svg+xml"><link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <a class="brand" href="#inicio"><span class="brand-mark">N</span><span>NEX<span>PLAY</span></span></a>
+      <div class="side-label">MENU PRINCIPAL</div>
+      <nav class="side-nav">
+        <a class="nav-link active" href="#inicio" data-nav="inicio"><span>⌂</span> Início</a>
+        <a class="nav-link" href="#explorar" data-nav="explorar"><span>▦</span> Explorar jogos</a>
+        <a class="nav-link" href="#favoritos" data-nav="favoritos"><span>♡</span> Favoritos</a>
+        <a class="nav-link" href="#recentes" data-nav="recentes"><span>◷</span> Jogados recentemente</a>
+      </nav>
+      <div class="sidebar-bottom"><div class="offline-card"><span class="status-dot"></span><div><b>Modo preparado</b><small>Instale para jogar offline</small></div></div><small class="side-foot">NEXPLAY © 2026</small></div>
+    </aside>
+    <main class="main-content" id="inicio">
+      <header class="topbar"><button class="mobile-brand" onclick="location.hash='#inicio'">NEX<span>PLAY</span></button><div class="breadcrumb">Biblioteca <span>/</span> <b id="crumb">Início</b></div><div class="top-actions"><span class="connection"><i></i><span id="connectionText">Conectado</span></span><button class="avatar" title="Perfil local">P</button></div></header>
+      <section class="hero"><div class="hero-copy"><div class="eyebrow"><span class="spark">✦</span> SUA CENTRAL DE JOGOS</div><h1>Sua próxima<br>partida <em>começa aqui.</em></h1><p>Descubra jogos, salve seus favoritos e continue se divertindo — até quando estiver sem internet.</p><div class="hero-actions"><a class="primary-btn" href="#explorar">Explorar jogos <span>↗</span></a><button class="text-btn" id="installBtn">＋ Instalar NEXPLAY</button></div><div class="hero-meta"><span><b>07</b> jogos disponíveis</span><span class="meta-divider"></span><span><b>100%</b> diversão local</span></div></div><div class="hero-art" aria-label="Ilustração abstrata de videogame"><div class="orbit orbit-one"></div><div class="orbit orbit-two"></div><div class="gamepad"><div class="pad-cross"><i></i><b></b></div><div class="pad-buttons"><i></i><i></i><i></i><i></i></div><div class="pad-center">N</div></div><div class="float-chip chip-one">✦ PLAY</div><div class="float-chip chip-two">OFFLINE READY</div><div class="art-glow"></div></div></section>
+      <section class="stats-row"><div class="stat"><span class="stat-icon purple">▦</span><div><b id="totalGames">07</b><small>Jogos na biblioteca</small></div></div><div class="stat"><span class="stat-icon pink">♡</span><div><b id="favCount">00</b><small>Seus favoritos</small></div></div><div class="stat"><span class="stat-icon blue">◷</span><div><b id="recentCount">00</b><small>Jogos recentes</small></div></div><div class="stat"><span class="stat-icon green">⌁</span><div><b>Offline</b><small>Preparado para instalar</small></div></div></section>
+      <section class="content-section" id="explorar"><div class="section-heading"><div><div class="eyebrow">ESCOLHA SUA EXPERIÊNCIA</div><h2>Descubra seu próximo jogo</h2><p>Partidas rápidas, desafios para superar e jogos que rodam direto no navegador.</p></div><div class="search-wrap"><span>⌕</span><input id="searchInput" type="search" placeholder="Buscar jogo..." aria-label="Buscar jogo"></div></div>
+        <div class="filter-row" id="filters"><button class="filter active" data-filter="Todos">Todos <span>07</span></button><button class="filter" data-filter="Arcade">Arcade</button><button class="filter" data-filter="Puzzle">Puzzle</button><button class="filter" data-filter="Clássicos">Clássicos</button><button class="filter" data-filter="Habilidade">Habilidade</button><button class="filter" data-filter="Casual">Casual</button></div>
+        <div class="game-grid" id="gameGrid"></div><div class="empty-state" id="emptyState" hidden>Nenhum jogo encontrado. Tente outra busca.</div>
+      </section>
+      <section class="content-section lower-section" id="favoritos"><div class="section-heading compact"><div><div class="eyebrow">SUA COLEÇÃO</div><h2>Seus favoritos</h2></div></div><div class="mini-list" id="favoriteList"><p class="muted">Toque no coração de um jogo para adicioná-lo aqui.</p></div></section>
+      <section class="content-section lower-section" id="recentes"><div class="section-heading compact"><div><div class="eyebrow">CONTINUE DE ONDE PAROU</div><h2>Jogados recentemente</h2></div></div><div class="mini-list" id="recentList"><p class="muted">Os jogos que você abrir aparecerão aqui.</p></div></section>
+      <footer><a class="brand footer-brand" href="#inicio"><span class="brand-mark">N</span><span>NEX<span>PLAY</span></span></a><span>Feito para jogar. Feito para ser seu.</span><span>Versão 2.0.0 · NEXPLAY</span></footer>
+    </main>
+  </div>
+  <div class="modal" id="gameModal" aria-hidden="true"><div class="modal-backdrop" data-close></div><div class="game-window"><div class="game-window-head"><div><span class="live-dot"></span><b id="modalTitle">Jogo</b><small id="modalCategory">Arcade</small></div><button class="close-btn" data-close aria-label="Fechar jogo">✕</button></div><div class="game-stage" id="gameStage"></div><div class="game-window-foot"><span>✦ NEXPLAY ARCADE</span><span>Seu progresso fica neste dispositivo quando compatível.</span></div></div></div>
+  <script src="app.js"></script>
+</body></html>
