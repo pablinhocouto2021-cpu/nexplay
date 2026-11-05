@@ -1,0 +1,91 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#080d19">
+  <title>NEXPLAY BATTLE</title>
+  <link rel="stylesheet" href="battle.css">
+</head>
+<body>
+
+  <div id="game">
+    <header class="top-bar">
+      <strong>NEXPLAY BATTLE</strong>
+      <button id="settingsBtn">⚙️</button>
+    </header>
+
+    <canvas id="gameCanvas"></canvas>
+
+    <div id="gameHUD">
+      <div class="player-info">
+        <span>JOGADOR</span>
+        <div class="health"><div id="playerHealth"></div></div>
+      </div>
+
+      <div class="bot-info">
+        <span>BOT</span>
+        <div class="health"><div id="botHealth"></div></div>
+      </div>
+
+      <div class="mobile-controls">
+        <div id="joystick">
+          <div id="stick"></div>
+        </div>
+
+        <div class="action-buttons">
+          <button id="runBtn">🏃<small>CORRER</small></button>
+          <button id="jumpBtn">⬆️<small>PULAR</small></button>
+          <button id="buildBtn">🧱<small>CONSTRUIR</small></button>
+          <button id="shootBtn">⚡<small>DISPARAR</small></button>
+        </div>
+      </div>
+
+      <div id="score">0 × 0</div>
+    </div>
+
+    <div id="settingsPanel" hidden>
+      <h2>CONFIGURAÇÕES</h2>
+
+      <nav>
+        <button data-tab="graphics">Gráficos</button>
+        <button data-tab="hud">HUD</button>
+        <button data-tab="sensitivity">Sensibilidade</button>
+        <button data-tab="controls">Controles</button>
+      </nav>
+
+      <section id="graphics" class="tab">
+        <h3>Qualidade gráfica</h3>
+        <select id="graphicsQuality">
+          <option value="low">Baixo</option>
+          <option value="medium" selected>Médio</option>
+          <option value="high">Alto</option>
+        </select>
+      </section>
+
+      <section id="hud" class="tab" hidden>
+        <h3>Personalizar HUD</h3>
+        <p>Personalização dos botões será implementada.</p>
+      </section>
+
+      <section id="sensitivity" class="tab" hidden>
+        <h3>Sensibilidade da câmera</h3>
+        <input id="sensitivityValue" type="range" min="1" max="100" value="50">
+      </section>
+
+      <section id="controls" class="tab" hidden>
+        <h3>Controles</h3>
+        <p>Celular: toque e arraste.</p>
+        <p>Computador: teclado e mouse.</p>
+      </section>
+
+      <button id="closeSettings">VOLTAR AO JOGO</button>
+    </div>
+
+    <button id="fullscreenBtn">⛶ TELA CHEIA</button>
+  </div>
+
+  <script src="battle.js"></script>
+</body>
+</html>
