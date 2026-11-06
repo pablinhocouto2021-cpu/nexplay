@@ -18,17 +18,10 @@
     70, window.innerWidth / window.innerHeight, 0.1, 200
   );
 
-  let renderer;
-  try {
-    renderer = new THREE.WebGLRenderer({
-      canvas,
-      antialias: true,
-      powerPreference: "high-performance"
-    });
-  } catch (error) {
-    alert("Seu navegador não conseguiu iniciar os gráficos 3D. Atualize o navegador e tente novamente.");
-    return;
-  }
+  const renderer = new THREE.WebGLRenderer({
+    canvas,
+    antialias: true
+  });
 
   renderer.setPixelRatio(Math.min(devicePixelRatio || 1, 1.5));
   renderer.setSize(innerWidth, innerHeight);
@@ -56,15 +49,11 @@
     );
   } catch (e) {}
 
-  settings.quality = ["low", "medium", "high"].includes(settings.quality) ? settings.quality : "medium";
-  settings.sensitivity = THREE.MathUtils.clamp(Number(settings.sensitivity) || 50, 1, 100);
-  settings.hudSize = THREE.MathUtils.clamp(Number(settings.hudSize) || 100, 70, 130);
-  settings.hudOpacity = THREE.MathUtils.clamp(Number(settings.hudOpacity) || 85, 30, 100);
-
   function saveSettings() {
-    try {
-      localStorage.setItem("nexplayBattleSettings", JSON.stringify(settings));
-    } catch (e) {}
+    localStorage.setItem(
+      "nexplayBattleSettings",
+      JSON.stringify(settings)
+    );
   }
 
   function applyGraphics() {
@@ -124,77 +113,38 @@
   createBox(-8, 1, 8, 3, 2, 3, 0x7c8994);
   createBox(8, 1, 7, 3, 2, 3, 0x7c8994);
 
-  // CENÁRIO: árvores, pedras e arbustos leves, sem dependência de imagens externas.
-  function createTree(x, z, scale = 1) {
-    const trunk = new THREE.Mesh(
-      new THREE.CylinderGeometry(0.18 * scale, 0.25 * scale, 1.7 * scale, 7),
-      new THREE.MeshStandardMaterial({ color: 0x705039, roughness: 1 })
-    );
-    trunk.position.set(x, 0.85 * scale, z);
-    trunk.castShadow = true;
-    scene.add(trunk);
-    const crown = new THREE.Mesh(
-      new THREE.IcosahedronGeometry(1.05 * scale, 1),
-      new THREE.MeshStandardMaterial({ color: 0x267447, roughness: 1, flatShading: true })
-    );
-    crown.position.set(x, 2.0 * scale, z);
-    crown.castShadow = true;
-    scene.add(crown);
-  }
-
-  function createRock(x, z, scale = 1) {
-    const rock = new THREE.Mesh(
-      new THREE.DodecahedronGeometry(scale, 0),
-      new THREE.MeshStandardMaterial({ color: 0x687583, roughness: 1, flatShading: true })
-    );
-    rock.position.set(x, scale * 0.55, z);
-    rock.rotation.set(0.2, x * 0.13, 0.35);
-    rock.scale.y = 0.72;
-    rock.castShadow = true;
-    rock.receiveShadow = true;
-    scene.add(rock);
-  }
-
-  [ [-19,-17,1.2],[-15,16,0.9],[18,-17,1.1],[19,15,1.25],[-21,2,0.8],[21,-2,0.9],[-12,-22,0.8],[12,22,0.8] ]
-    .forEach(([x,z,s]) => createTree(x,z,s));
-  [ [-13,-10,1.1],[13,-12,0.9],[-15,11,0.8],[15,12,1.2],[-3,-20,0.7],[4,20,0.7] ]
-    .forEach(([x,z,s]) => createRock(x,z,s));
-
   // PERSONAGENS
   function createCharacter(color) {
     const group = new THREE.Group();
-    const suit = new THREE.MeshStandardMaterial({ color, roughness: 0.72 });
-    const dark = new THREE.MeshStandardMaterial({ color: 0x182b46, roughness: 0.9 });
-    const skin = new THREE.MeshStandardMaterial({ color: 0xffd0a0, roughness: 0.85 });
 
-    const body = new THREE.Mesh(new THREE.CapsuleGeometry(0.38, 0.55, 4, 8), suit);
-    body.position.y = 1.22;
+    const body = new THREE.Mesh(
+      new THREE.BoxGeometry(0.8, 1.1, 0.45),
+      new THREE.MeshStandardMaterial({ color })
+    );
+
+    body.position.y = 1.15;
     group.add(body);
 
-    const head = new THREE.Mesh(new THREE.SphereGeometry(0.3, 16, 16), skin);
+    const head = new THREE.Mesh(
+      new THREE.SphereGeometry(0.3, 16, 16),
+      new THREE.MeshStandardMaterial({ color: 0xffd0a0 })
+    );
+
     head.position.y = 1.95;
     group.add(head);
 
-    const leftArm = new THREE.Mesh(new THREE.CapsuleGeometry(0.12, 0.48, 3, 7), suit);
-    leftArm.position.set(-0.5, 1.25, 0);
-    leftArm.rotation.z = -0.12;
-    group.add(leftArm);
-    const rightArm = leftArm.clone();
-    rightArm.position.x = 0.5;
-    rightArm.rotation.z = 0.12;
-    group.add(rightArm);
+    const legs = new THREE.Mesh(
+      new THREE.BoxGeometry(0.65, 0.65, 0.4),
+      new THREE.MeshStandardMaterial({ color: 0x182b46 })
+    );
 
-    const leftLeg = new THREE.Mesh(new THREE.CapsuleGeometry(0.14, 0.48, 3, 7), dark);
-    leftLeg.position.set(-0.2, 0.48, 0);
-    group.add(leftLeg);
-    const rightLeg = leftLeg.clone();
-    rightLeg.position.x = 0.2;
-    group.add(rightLeg);
+    legs.position.y = 0.48;
+    group.add(legs);
 
-    group.userData.anim = { body, head, leftArm, rightArm, leftLeg, rightLeg };
     group.traverse(obj => {
-      if (obj.isMesh) { obj.castShadow = true; obj.receiveShadow = true; }
+      if (obj.isMesh) obj.castShadow = true;
     });
+
     scene.add(group);
     return group;
   }
@@ -210,8 +160,7 @@
     score: 0,
     verticalSpeed: 0,
     grounded: true,
-    crouching: false,
-    moving: false
+    crouching: false
   };
 
   const botState = {
@@ -351,7 +300,6 @@
   let lastTouchY = 0;
 
   canvas.addEventListener("pointerdown", event => {
-    if (event.pointerType === "mouse" && event.button !== 0) return;
     if (event.clientX < innerWidth * 0.45) return;
 
     cameraPointer = event.pointerId;
@@ -381,7 +329,6 @@
 
   canvas.addEventListener("pointerup", releaseCamera);
   canvas.addEventListener("pointercancel", releaseCamera);
-  canvas.addEventListener("lostpointercapture", releaseCamera);
 
   // DISPAROS DE ENERGIA
   const projectiles = [];
@@ -535,7 +482,6 @@
       .add(right.multiplyScalar(sideways));
 
     if (velocity.length() > 1) velocity.normalize();
-    playerState.moving = velocity.length() > 0.04;
 
     player.position.addScaledVector(velocity, speed * delta);
 
@@ -623,8 +569,7 @@
         panel.hidden = true;
       });
 
-      const panel = $(button.dataset.tab);
-      if (panel) panel.hidden = false;
+      $(button.dataset.tab).hidden = false;
     });
   });
 
@@ -674,7 +619,6 @@
 
   applyHUD();
   applyGraphics();
-  resizeGame();
 
   // TELA CHEIA E ORIENTAÇÃO
   $("fullscreenBtn").addEventListener("click", async () => {
@@ -721,41 +665,15 @@
       updateHealth();
     }
 
-    const walkCycle = time * 0.009;
-    const playerAnim = player.userData.anim;
-    const botAnim = bot.userData.anim;
-    const playerSwing = playerState.moving ? Math.sin(walkCycle) * 0.48 : Math.sin(walkCycle * 0.35) * 0.035;
-    const botMoving = botState.health > 0 && playerState.health > 0 && bot.position.distanceTo(player.position) > 4.2;
-    const botSwing = botMoving ? Math.sin(walkCycle * 0.75) * 0.34 : Math.sin(walkCycle * 0.25) * 0.025;
-    if (playerAnim) {
-      playerAnim.leftArm.rotation.x = playerSwing;
-      playerAnim.rightArm.rotation.x = -playerSwing;
-      playerAnim.leftLeg.rotation.x = -playerSwing * 0.8;
-      playerAnim.rightLeg.rotation.x = playerSwing * 0.8;
-      playerAnim.head.rotation.y = Math.sin(walkCycle * 0.2) * 0.025;
-    }
-    if (botAnim) {
-      botAnim.leftArm.rotation.x = botSwing;
-      botAnim.rightArm.rotation.x = -botSwing;
-      botAnim.leftLeg.rotation.x = -botSwing * 0.7;
-      botAnim.rightLeg.rotation.x = botSwing * 0.7;
-    }
-
     updateCamera();
     renderer.render(scene, camera);
   }
 
-  function resizeGame() {
-    const width = Math.max(1, canvas.clientWidth || innerWidth);
-    const height = Math.max(1, canvas.clientHeight || innerHeight);
-    camera.aspect = width / height;
+  window.addEventListener("resize", () => {
+    camera.aspect = innerWidth / innerHeight;
     camera.updateProjectionMatrix();
-    renderer.setPixelRatio(Math.min(devicePixelRatio || 1, settings.quality === "low" ? 1 : settings.quality === "high" ? 1.5 : 1.25));
-    renderer.setSize(width, height, false);
-  }
-
-  window.addEventListener("resize", resizeGame, { passive: true });
-  if (window.visualViewport) window.visualViewport.addEventListener("resize", resizeGame, { passive: true });
+    renderer.setSize(innerWidth, innerHeight);
+  });
 
   updateHealth();
   updateCamera();
