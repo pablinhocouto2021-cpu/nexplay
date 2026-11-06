@@ -18,10 +18,17 @@
     70, window.innerWidth / window.innerHeight, 0.1, 200
   );
 
-  const renderer = new THREE.WebGLRenderer({
-    canvas,
-    antialias: true
-  });
+  let renderer;
+  try {
+    renderer = new THREE.WebGLRenderer({
+      canvas,
+      antialias: true,
+      powerPreference: "high-performance"
+    });
+  } catch (error) {
+    alert("Seu navegador não conseguiu iniciar os gráficos 3D. Atualize o navegador e tente novamente.");
+    return;
+  }
 
   renderer.setPixelRatio(Math.min(devicePixelRatio || 1, 1.5));
   renderer.setSize(innerWidth, innerHeight);
@@ -50,10 +57,9 @@
   } catch (e) {}
 
   function saveSettings() {
-    localStorage.setItem(
-      "nexplayBattleSettings",
-      JSON.stringify(settings)
-    );
+    try {
+      localStorage.setItem("nexplayBattleSettings", JSON.stringify(settings));
+    } catch (e) {}
   }
 
   function applyGraphics() {
