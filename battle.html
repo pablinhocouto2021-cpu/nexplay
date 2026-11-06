@@ -2,104 +2,84 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#080d19">
   <title>NEXPLAY BATTLE</title>
-  <link rel="stylesheet" href="./battle.css?v=3">
+  <link rel="stylesheet" href="battle.css?v=4">
 </head>
 <body>
-  <div id="game">
+  <main id="game">
     <header class="topbar">
       <strong>NEXPLAY <span>BATTLE</span></strong>
-      <button id="settingsBtn" class="icon-btn" aria-label="Configurações">⚙️</button>
+      <button id="settingsBtn" class="icon-btn" type="button" aria-label="Abrir configurações">⚙️</button>
     </header>
 
-    <canvas id="gameCanvas"></canvas>
+    <canvas id="gameCanvas" aria-label="Arena 3D do jogo"></canvas>
 
-    <div class="match-info">
-      <div class="health-card">
-        <small>JOGADOR</small>
-        <div class="health-track"><i id="playerHealth"></i></div>
-      </div>
+    <section class="match-info" aria-label="Placar da partida">
+      <div class="health-card"><small>JOGADOR</small><div class="health-track"><i id="playerHealth"></i></div></div>
       <div id="score">0 × 0</div>
-      <div class="health-card">
-        <small>BOT</small>
-        <div class="health-track"><i id="botHealth"></i></div>
-      </div>
-    </div>
+      <div class="health-card"><small>BOT</small><div class="health-track"><i id="botHealth"></i></div></div>
+    </section>
+    <div id="message" role="status" aria-live="polite">Toque em INICIAR para jogar</div>
 
-    <div id="message">Prepare-se para a partida</div>
-
-    <div class="mobile-hud">
+    <section id="gameHUD" class="mobile-hud" aria-label="Controles do jogo">
       <div class="left-controls">
-        <div id="joystick" class="joystick" aria-label="Movimentação">
-          <div id="stick" class="stick"></div>
-        </div>
-        <button id="runBtn" class="control-btn run">🏃<small>CORRER</small></button>
-        <button id="crouchBtn" class="control-btn">⬇️<small>AGACHAR</small></button>
+        <div id="joystick" class="joystick" aria-label="Direcional"><div id="stick" class="stick"></div></div>
       </div>
       <div class="right-controls">
-        <button id="jumpBtn" class="control-btn">⬆️<small>PULAR</small></button>
-        <button id="buildBtn" class="control-btn">🧱<small>CONSTRUIR</small></button>
-        <button id="shootBtn" class="control-btn shoot">⚡<small>DISPARAR</small></button>
+        <button id="runBtn" class="control-btn run" type="button">🏃<small>CORRER</small></button>
+        <button id="crouchBtn" class="control-btn" type="button">⬇️<small>AGACHAR</small></button>
+        <button id="jumpBtn" class="control-btn" type="button">⬆️<small>PULAR</small></button>
+        <button id="buildBtn" class="control-btn" type="button">🧱<small>CONSTRUIR</small></button>
+        <button id="shootBtn" class="control-btn shoot" type="button">✦<small>DISPARAR</small></button>
       </div>
-    </div>
+      <div class="camera-hint">Arraste o lado direito para olhar</div>
+    </section>
 
-    <div class="camera-hint">Arraste o lado direito para olhar</div>
-    <button id="fullscreenBtn" class="fullscreen-btn">⛶ TELA CHEIA</button>
+    <button id="fullscreenBtn" class="fullscreen-btn" type="button">⛶ TELA CHEIA</button>
 
-    <section id="settingsPanel" class="settings-panel" hidden>
-      <div class="settings-head">
-        <h2>CONFIGURAÇÕES</h2>
-        <button id="closeSettings" class="icon-btn" aria-label="Fechar">✕</button>
-      </div>
-      <nav class="settings-tabs">
-        <button data-tab="graphics" class="active">Gráficos</button>
-        <button data-tab="hud">HUD</button>
-        <button data-tab="sensitivity">Sensibilidade</button>
-        <button data-tab="controls">Controles</button>
+    <section id="settingsPanel" class="settings-panel" hidden aria-label="Configurações">
+      <div class="settings-head"><h2>CONFIGURAÇÕES</h2><button id="resumeBtn" class="icon-btn" type="button" aria-label="Fechar configurações">✕</button></div>
+      <nav class="settings-tabs" aria-label="Abas de configurações">
+        <button type="button" data-tab="graphics" class="active">Gráficos</button>
+        <button type="button" data-tab="hud">HUD</button>
+        <button type="button" data-tab="sensitivity">Sensibilidade</button>
+        <button type="button" data-tab="controls">Controles</button>
       </nav>
-
       <section id="graphics" class="tab-panel">
         <label for="graphicsQuality">Qualidade gráfica</label>
-        <select id="graphicsQuality">
-          <option value="low">Baixo</option>
-          <option value="medium" selected>Médio</option>
-          <option value="high">Alto</option>
-        </select>
+        <select id="graphicsQuality"><option value="low">Baixo</option><option value="medium" selected>Médio</option><option value="high">Alto</option></select>
+        <p>Use gráficos baixos para priorizar o desempenho em celulares.</p>
       </section>
-
       <section id="hud" class="tab-panel" hidden>
-        <label for="hudSize">Tamanho dos botões <output id="hudSizeValue">100%</output></label>
+        <label for="hudSize">Tamanho dos controles <output id="hudSizeValue">100%</output></label>
         <input id="hudSize" type="range" min="70" max="130" value="100">
-        <label for="hudOpacity">Opacidade dos botões <output id="hudOpacityValue">85%</output></label>
+        <label for="hudOpacity">Opacidade dos controles <output id="hudOpacityValue">85%</output></label>
         <input id="hudOpacity" type="range" min="30" max="100" value="85">
       </section>
-
       <section id="sensitivity" class="tab-panel" hidden>
         <label for="sensitivityValue">Sensibilidade da câmera <output id="sensitivityLabel">50%</output></label>
         <input id="sensitivityValue" type="range" min="1" max="100" value="50">
       </section>
-
       <section id="controls" class="tab-panel" hidden>
-        <p>Celular: use o joystick para andar e arraste o lado direito da tela para olhar.</p>
-        <p>Computador: WASD para andar, Shift para correr, Ctrl para agachar, Espaço para pular e clique/toque nos botões para as ações.</p>
+        <p><b>Celular:</b> use o direcional à esquerda e arraste o lado direito da tela para olhar.</p>
+        <p><b>Computador:</b> WASD para mover, Shift para correr, Ctrl para agachar, Espaço para pular e mouse para olhar.</p>
       </section>
-      <button id="resumeBtn" class="primary-btn">VOLTAR AO JOGO</button>
+      <button id="closeSettings" class="primary-btn" type="button">VOLTAR AO JOGO</button>
     </section>
 
     <section id="startScreen" class="start-screen">
       <div class="start-card">
         <div class="eyebrow">NEXPLAY ORIGINAL</div>
         <h1>NEXPLAY <span>BATTLE</span></h1>
-        <p>Entre na arena, enfrente o bot e vença a rodada.</p>
-        <button id="startBtn" class="primary-btn">JOGAR AGORA</button>
-        <small>Jogo de demonstração para navegador</small>
+        <p>Arena 3D de treino contra bot</p>
+        <button id="startBtn" class="primary-btn" type="button">INICIAR PARTIDA</button>
+        <small>O desempenho varia conforme o aparelho e o navegador.</small>
       </div>
     </section>
-  </div>
-
+  </main>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.160.0/three.min.js"></script>
-  <script src="./battle.js?v=3"></script>
+  <script src="battle.js?v=4"></script>
 </body>
 </html>
